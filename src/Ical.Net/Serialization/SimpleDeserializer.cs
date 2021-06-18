@@ -8,7 +8,7 @@ using Ical.Net.CalendarComponents;
 
 namespace Ical.Net.Serialization
 {
-    public class SimpleDeserializer
+    public class SimpleDeserializer : ICalendarDeserializer
     {
         internal SimpleDeserializer(
             DataTypeMapper dataTypeMapper,
@@ -69,6 +69,15 @@ namespace Ical.Net.Serialization
         }
 
         public IEnumerable<ICalendarComponent> Deserialize(TextReader reader)
+        {
+            var deserializer = new CalendarDeserializer(reader);
+            foreach (var item in deserializer)
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<ICalendarComponent> Deserialize_old(TextReader reader)
         {
             var context = new SerializationContext();
             var stack = new Stack<ICalendarComponent>();
